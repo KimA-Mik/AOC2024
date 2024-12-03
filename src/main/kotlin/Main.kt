@@ -2,6 +2,7 @@ package com.github.kima_mik
 
 import com.github.kima_mik.days.Day1
 import com.github.kima_mik.days.Day2
+import com.github.kima_mik.days.Day3
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -14,6 +15,7 @@ fun main(args: Array<String>) {
     when (day) {
         1 -> day1()
         2 -> day2()
+        3 -> day3()
         else -> return
     }
 }
@@ -40,6 +42,15 @@ fun day2() {
 
     val res2 = day2.countSafeReportsWithDampenerNSquaredVersion(input)
     println("Day 2_2: $res2")
+}
+
+fun day3() {
+    val day3 = Day3()
+    val input = getInput(3, 1)
+        ?: exitProcess(1)
+
+    val res1 = day3.extractMultiplyFromCorruptedMemory(input)
+    println("Day 3_1: $res1")
 }
 
 fun getInput(day: Int, puzzleInput: Int): String? {

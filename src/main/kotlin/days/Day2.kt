@@ -98,7 +98,7 @@ class Day2 {
             diff = report[rCursor] - report[lCursor]
             sign = diff.sign
             badLevelCount++
-            debugPrint(rCursor)
+//            debugPrint(rCursor)
             rCursor = 2
         }
 
@@ -106,14 +106,14 @@ class Day2 {
             diff = report[rCursor] - report[lCursor]
             if (diff.sign != sign || abs(diff) > MAX_SAFE_DIFFERENCE) {
                 badLevelCount++
-                debugPrint(rCursor)
+//                debugPrint(rCursor)
             } else {
                 lCursor++
             }
             rCursor++
         }
 
-        println("report $report is ${badLevelCount <= droppableReports}, badLevelCount = $badLevelCount")
+//        println("report $report is ${badLevelCount <= droppableReports}, badLevelCount = $badLevelCount")
 
         return badLevelCount <= droppableReports
     }
