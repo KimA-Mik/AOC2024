@@ -38,6 +38,8 @@ fun day2() {
     val res1 = day2.countSafeReports(input)
     println("Day 2_1: $res1")
 
+    val res2 = day2.countSafeReportsWithDampenerNSquaredVersion(input)
+    println("Day 2_2: $res2")
 }
 
 fun getInput(day: Int, puzzleInput: Int): String? {

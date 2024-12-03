@@ -14,4 +14,13 @@ class Day2Test {
         val res = day2.countSafeReports(input)
         assertEquals(2, res)
     }
+
+    @Test
+    fun countSafeReportsWithDampener() {
+        val resDumb = day2.countSafeReportsWithDampenerNSquaredVersion(input)
+        assertEquals(4, resDumb)
+
+        val res = day2.countSafeReportsWithDampener(input)
+        assertEquals(4, res)
+    }
 }
