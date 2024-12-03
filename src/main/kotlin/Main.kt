@@ -51,6 +51,9 @@ fun day3() {
 
     val res1 = day3.extractMultiplyFromCorruptedMemory(input)
     println("Day 3_1: $res1")
+
+    val res2 = day3.damnItPuzzle2(input)
+    println("Day 3_2: $res2")
 }
 
 fun getInput(day: Int, puzzleInput: Int): String? {
