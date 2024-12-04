@@ -12,5 +12,6 @@ class Day4Test {
     @Test
     fun puzzle1() {
         assertEquals(18, day4.puzzle1(input))
+        assertEquals(9, day4.puzzle2(input))
     }
 }

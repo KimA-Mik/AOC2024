@@ -56,4 +56,37 @@ class Day4 {
 
         return if (found) 1 else 0
     }
+
+    fun puzzle2(input: String): Int {
+        val lines = input.lines()
+        var total = 0
+
+        for (y in 1 until lines.lastIndex) {
+            for (x in 1 until lines[y].lastIndex) {
+                if (lines[y][x] != 'A') {
+                    continue
+                }
+                total += findCrossXmas(lines, x, y)
+            }
+        }
+
+        return total
+    }
+
+    private val set = setOf('M', 'S')
+    private fun findCrossXmas(input: List<String>, x: Int, y: Int): Int {
+        var top = input[y - 1][x - 1]
+        var bottom = input[y + 1][x + 1]
+        if (top == bottom || !set.contains(top) || !set.contains(bottom)) {
+            return 0
+        }
+
+        top = input[y - 1][x + 1]
+        bottom = input[y + 1][x - 1]
+        if (top == bottom || !set.contains(top) || !set.contains(bottom)) {
+            return 0
+        }
+
+        return 1
+    }
 }
