@@ -80,4 +80,38 @@ class Day5 {
 
         return sorted[sorted.size / 2]
     }
+
+    fun puzzle2_2(input: String): Int {
+        var result = 0
+
+        val pageOrderingRules = extractPageOrderingRules(input)
+        val updates = extractUpdates(input)
+
+        for (update in updates) {
+            if (validateUpdate(update, pageOrderingRules) > 0) continue
+
+            result += reorderUpdate2(update, pageOrderingRules)
+        }
+
+        return result
+    }
+
+    private fun reorderUpdate2(update: List<Int>, rules: Map<Int, Set<Int>>): Int {
+        for (i in update.indices) {
+            var left = 0
+            var right = 0
+            val rule = rules[update[i]] ?: continue
+            for (j in update.indices) {
+                if (i == j) continue
+                if (rule.contains(update[j])) {
+                    right++
+                } else {
+                    left++
+                }
+            }
+
+            if (left == right) return update[i]
+        }
+        return 0
+    }
 }
