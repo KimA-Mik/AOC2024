@@ -52,4 +52,32 @@ class Day5 {
 
         return update[update.size / 2]
     }
+
+    fun puzzle2(input: String): Int {
+        var result = 0
+
+        val pageOrderingRules = extractPageOrderingRules(input)
+        val updates = extractUpdates(input)
+
+        for (update in updates) {
+            if (validateUpdate(update, pageOrderingRules) > 0) continue
+
+            result += reorderUpdate(update, pageOrderingRules)
+        }
+
+        return result
+    }
+
+    private fun reorderUpdate(update: List<Int>, rules: Map<Int, Set<Int>>): Int {
+        val sorted = update.sortedWith { o1, o2 ->
+            val rule = rules[o1] ?: return@sortedWith 0
+            if (rule.contains(o2)) {
+                -1
+            } else {
+                0
+            }
+        }
+
+        return sorted[sorted.size / 2]
+    }
 }

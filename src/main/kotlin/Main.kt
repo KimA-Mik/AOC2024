@@ -75,6 +75,9 @@ fun day5() {
 
     val res1 = day5.puzzle1(input)
     println("Day 5_1: $res1")
+
+    val res2 = day5.puzzle2(input)
+    println("Day 5_2: $res2")
 }
 
 fun getInput(day: Int, puzzleInput: Int? = null): String? {
