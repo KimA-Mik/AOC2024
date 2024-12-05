@@ -1,9 +1,6 @@
 package com.github.kima_mik
 
-import com.github.kima_mik.days.Day1
-import com.github.kima_mik.days.Day2
-import com.github.kima_mik.days.Day3
-import com.github.kima_mik.days.Day4
+import com.github.kima_mik.days.*
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -18,6 +15,7 @@ fun main(args: Array<String>) {
         2 -> day2()
         3 -> day3()
         4 -> day4()
+        5 -> day5()
         else -> return
     }
 }
@@ -70,6 +68,15 @@ fun day4() {
     println("Day 4_2: $res2")
 }
 
+fun day5() {
+    val day5 = Day5()
+    val input = getInput(5)
+        ?: exitProcess(1)
+
+    val res1 = day5.puzzle1(input)
+    println("Day 5_1: $res1")
+}
+
 fun getInput(day: Int, puzzleInput: Int? = null): String? {
     val filename = buildString {
         append("puzzle_input_")
@@ -83,7 +90,7 @@ fun getInput(day: Int, puzzleInput: Int? = null): String? {
 
     val file = File("inputs", filename)
     if (!file.exists()) {
-        println("File ${file.absolutePath} does not exist")
+        println("Expected $filename with input data")
         return null
     }
     return file.readText()
