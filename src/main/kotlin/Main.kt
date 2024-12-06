@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
         3 -> day3()
         4 -> day4()
         5 -> day5()
+        6 -> day6()
         else -> return
     }
 }
@@ -81,6 +82,15 @@ fun day5() {
 
     val res2_2 = day5.puzzle2_2(input)
     println("Day 5_2_2: $res2_2")
+}
+
+fun day6() {
+    val day6 = Day6()
+    val input = getInput(6)
+        ?: exitProcess(1)
+
+    val res1 = day6.puzzle1(input)
+    println("Day 6_1: $res1")
 }
 
 fun getInput(day: Int, puzzleInput: Int? = null): String? {
