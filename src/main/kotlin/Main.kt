@@ -3,6 +3,7 @@ package com.github.kima_mik
 import com.github.kima_mik.days.*
 import java.io.File
 import kotlin.system.exitProcess
+import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     if (args.size != 1) {
@@ -91,6 +92,10 @@ fun day6() {
 
     val res1 = day6.puzzle1(input)
     println("Day 6_1: $res1")
+
+    val res2: Int
+    val res2Time = measureTimeMillis { res2 = day6.puzzle2BruteForce(input) }
+    println("Day 6_2: $res2 (brute force took $res2Time ms)")
 }
 
 fun getInput(day: Int, puzzleInput: Int? = null): String? {

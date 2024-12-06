@@ -1,5 +1,9 @@
 package com.github.kima_mik.days
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 class Day6 {
     private enum class Direction(val xOffset: Int, val yOffset: Int) {
         TOP(xOffset = 0, yOffset = -1),
@@ -39,12 +43,18 @@ class Day6 {
     }
 
     private class State(input: String) {
+        val fieldWidth: Int
+        val fieldHeight: Int
+        private val initialDirection: Direction
         private var direction: Direction
-        private val fieldWidth: Int
-        private val fieldHeight: Int
         private val field: CharArray
+        private val initialX: Int
         private var posX: Int = 0
+        private val initialY: Int
         private var posY: Int = 0
+
+        var totalVisitedCells = 0
+            private set
 
         init {
             val lines = input.trim().lines()
@@ -63,7 +73,10 @@ class Day6 {
                 }
             }
 
+            initialX = posX
+            initialY = posY
             direction = Direction.fromChar(getChar(posX, posY))
+            initialDirection = direction
         }
 
         fun isGuardOnField() = onField(posX, posY)
@@ -83,6 +96,7 @@ class Day6 {
 
         fun simulate() {
             setChar(posX, posY, VISITED)
+            totalVisitedCells += 1
             var nextX = posX + direction.xOffset
             var nextY = posY + direction.yOffset
             if (!onField(nextX, nextY)) {
@@ -92,7 +106,7 @@ class Day6 {
             }
 
             var nextC = getChar(nextX, nextY)
-            while (nextC == OBSTACLE &&
+            while ((nextC == OBSTACLE || nextC == LOOP_OBSTACLE) &&
                 onField(nextX, nextY)
             ) {
                 direction = direction.rotate()
@@ -105,7 +119,29 @@ class Day6 {
             posY = nextY
         }
 
-        private fun getChar(x: Int, y: Int): Char {
+        fun reset() {
+            posX = initialX
+            posY = initialY
+            direction = initialDirection
+            totalVisitedCells = 0
+
+            for (i in field.indices) {
+                val c = field[i]
+                if (c != OBSTACLE && c != EMPTY) {
+                    field[i] = EMPTY
+                }
+            }
+        }
+
+        fun visitedCellsCount() = field.count { it == VISITED }
+        fun setLoopObstacle(x: Int, y: Int) {
+            if (x == posX && y == posY) {
+                return
+            }
+            setChar(x, y, LOOP_OBSTACLE)
+        }
+
+        fun getChar(x: Int, y: Int): Char {
             return field[y * fieldWidth + x]
         }
 
@@ -120,6 +156,7 @@ class Day6 {
             const val EMPTY = '.'
             const val OBSTACLE = '#'
             const val VISITED = 'X'
+            const val LOOP_OBSTACLE = 'O'
         }
     }
 
@@ -130,8 +167,63 @@ class Day6 {
             sceneState.simulate()
         }
 
-        val field = sceneState.fieldString()
-        println("Scene:\n$field\n")
-        return field.count { it == State.VISITED }
+        return sceneState.visitedCellsCount()
+    }
+
+    fun puzzle2BruteForce(input: String): Int {
+        val mutex = Mutex()
+        var cores = Runtime.getRuntime().availableProcessors()
+        if (cores > 1) cores -= 1
+        var result = 0
+
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        suspend fun incrementResult() = mutex.withLock {
+            result += 1
+        }
+
+        val jobs = List(cores) { startOffset ->
+            scope.launch {
+                runConcurrentLoopCheck(
+                    input = input,
+                    startOffset = startOffset,
+                    offset = cores,
+                    increaseCounter = { incrementResult() }
+                )
+            }
+        }
+
+        runBlocking {
+            jobs.joinAll()
+        }
+
+        return result
+    }
+
+    private suspend fun runConcurrentLoopCheck(
+        input: String, startOffset: Int, offset: Int, increaseCounter: suspend () -> Unit
+    ) {
+        val state = State(input)
+
+        for (i in startOffset until state.fieldWidth * state.fieldHeight step offset) {
+            val x = i % state.fieldWidth
+            val y = i / state.fieldHeight
+
+            val c = state.getChar(x, y)
+            if (c == State.OBSTACLE) {
+                continue
+            }
+
+            state.setLoopObstacle(x, y)
+            var isGuardOnField = state.isGuardOnField()
+            while (isGuardOnField && state.totalVisitedCells / (state.visitedCellsCount() + 1) < 2) {
+                state.simulate()
+                isGuardOnField = state.isGuardOnField()
+            }
+
+            if (isGuardOnField) {
+                increaseCounter()
+            }
+            state.reset()
+        }
     }
 }

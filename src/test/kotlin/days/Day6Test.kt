@@ -13,4 +13,9 @@ class Day6Test {
     fun puzzle1() {
         assertEquals(41, day6.puzzle1(input))
     }
+
+    @Test
+    fun puzzle2() {
+        assertEquals(6, day6.puzzle2BruteForce(input))
+    }
 }
