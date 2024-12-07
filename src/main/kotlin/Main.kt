@@ -18,7 +18,11 @@ fun main(args: Array<String>) {
         4 -> day4()
         5 -> day5()
         6 -> day6()
-        else -> return
+        7 -> day7()
+        else -> {
+            println("Unknown day $day")
+            return
+        }
     }
 }
 
@@ -96,6 +100,15 @@ fun day6() {
     val res2: Int
     val res2Time = measureTimeMillis { res2 = day6.puzzle2BruteForce(input) }
     println("Day 6_2: $res2 (brute force took $res2Time ms)")
+}
+
+fun day7() {
+    val day7 = Day7()
+    val input = getInput(7)
+        ?: exitProcess(1)
+
+    val res1 = day7.puzzle1(input)
+    println("Day 7_1: $res1")
 }
 
 fun getInput(day: Int, puzzleInput: Int? = null): String? {
