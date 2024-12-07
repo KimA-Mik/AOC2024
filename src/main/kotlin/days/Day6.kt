@@ -45,6 +45,9 @@ class Day6 {
     private class State(input: String) {
         val fieldWidth: Int
         val fieldHeight: Int
+        var totalVisitedCells = 0
+            private set
+
         private val initialDirection: Direction
         private var direction: Direction
         private val field: CharArray
@@ -52,9 +55,6 @@ class Day6 {
         private var posX: Int = 0
         private val initialY: Int
         private var posY: Int = 0
-
-        var totalVisitedCells = 0
-            private set
 
         init {
             val lines = input.trim().lines()
@@ -97,26 +97,21 @@ class Day6 {
         fun simulate() {
             setChar(posX, posY, VISITED)
             totalVisitedCells += 1
-            var nextX = posX + direction.xOffset
-            var nextY = posY + direction.yOffset
+            val nextX = posX + direction.xOffset
+            val nextY = posY + direction.yOffset
             if (!onField(nextX, nextY)) {
                 posX = nextX
                 posY = nextY
                 return
             }
 
-            var nextC = getChar(nextX, nextY)
-            while ((nextC == OBSTACLE || nextC == LOOP_OBSTACLE) &&
-                onField(nextX, nextY)
-            ) {
+            val nextC = getChar(nextX, nextY)
+            if (nextC == OBSTACLE || nextC == LOOP_OBSTACLE) {
                 direction = direction.rotate()
-                nextX = posX + direction.xOffset
-                nextY = posY + direction.yOffset
-                nextC = getChar(nextX, nextY)
+            } else {
+                posX = nextX
+                posY = nextY
             }
-
-            posX = nextX
-            posY = nextY
         }
 
         fun reset() {
@@ -134,6 +129,14 @@ class Day6 {
         }
 
         fun visitedCellsCount() = field.count { it == VISITED }
+        fun visitedCellsIndices() = buildList {
+            for (i in field.indices) {
+                if (field[i] == VISITED) {
+                    add(i)
+                }
+            }
+        }
+
         fun setLoopObstacle(x: Int, y: Int) {
             if (x == posX && y == posY) {
                 return
@@ -176,7 +179,7 @@ class Day6 {
         if (cores > 1) cores -= 1
         var result = 0
 
-        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        val scope = CoroutineScope(Dispatchers.Default)
         suspend fun incrementResult() = mutex.withLock {
             result += 1
         }
@@ -203,15 +206,16 @@ class Day6 {
         input: String, startOffset: Int, offset: Int, increaseCounter: suspend () -> Unit
     ) {
         val state = State(input)
+        while (state.isGuardOnField()) {
+            state.simulate()
+        }
+        val visitedIndices = state.visitedCellsIndices()
+        state.reset()
 
-        for (i in startOffset until state.fieldWidth * state.fieldHeight step offset) {
-            val x = i % state.fieldWidth
-            val y = i / state.fieldHeight
-
-            val c = state.getChar(x, y)
-            if (c == State.OBSTACLE) {
-                continue
-            }
+        for (i in startOffset..visitedIndices.lastIndex step offset) {
+            val index = visitedIndices[i]
+            val x = index % state.fieldWidth
+            val y = index / state.fieldHeight
 
             state.setLoopObstacle(x, y)
             var isGuardOnField = state.isGuardOnField()
