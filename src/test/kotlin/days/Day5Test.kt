@@ -1,12 +1,12 @@
 package days
 
 import com.github.kima_mik.days.Day5
+import getTestInput
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
 
 class Day5Test {
-    private val input = Paths.get("inputs", "test_5.txt").toFile().readText()
+    private val input = getTestInput(5)
     private val day5 = Day5()
 
     @Test
