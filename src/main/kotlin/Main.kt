@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
         5 -> Day5()
         6 -> Day6()
         7 -> Day7()
+        8 -> Day8()
         else -> {
             println("Unknown day $dayNum")
             return
