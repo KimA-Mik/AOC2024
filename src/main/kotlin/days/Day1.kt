@@ -2,8 +2,8 @@ package com.github.kima_mik.days
 
 import kotlin.math.abs
 
-class Day1 {
-    fun totalDistanceBetweenLists(input: String): Int {
+class Day1 : AOCDay(1) {
+    override fun puzzle1(input: String): Int {
         val (leftList, rightList) = extractSortedLists(input)
 
         var totalDistance = 0
@@ -15,7 +15,7 @@ class Day1 {
     }
 
 
-    fun similarityScore(input: String): Int {
+    override fun puzzle2(input: String): Int {
         class Counter(var right: Int) {
             var left = 1
         }

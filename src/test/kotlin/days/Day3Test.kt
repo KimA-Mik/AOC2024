@@ -12,13 +12,13 @@ class Day3Test {
 
     @Test
     fun extractMultiplyFromCorruptedMemory() {
-        val res = day3.extractMultiplyFromCorruptedMemory(input)
-        assertEquals(161, res)
+        val res = day3.puzzle1(input)
+        assertEquals(161L, res)
     }
 
     @Test
     fun puzzle2() {
-        val res = day3.damnItPuzzle2(input2)
+        val res = day3.puzzle2(input2)
         assertEquals(48L, res)
     }
 }

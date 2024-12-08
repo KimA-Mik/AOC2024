@@ -1,7 +1,7 @@
 package com.github.kima_mik.days
 
-class Day3 {
-    fun extractMultiplyFromCorruptedMemory(input: String): Long {
+class Day3 : AOCDay(3) {
+    override fun puzzle1(input: String): Long {
         var res = 0L
         Regex("""mul\(-?\d+,-?\d+\)""")
             .findAll(input)
@@ -15,7 +15,7 @@ class Day3 {
 
     private val enableCommand = "do()"
     private val disableCommand = "don't()"
-    fun damnItPuzzle2(input: String): Long {
+    override fun puzzle2(input: String): Long {
         var enabled = true
         var res = 0L
         """do\(\)|don't\(\)|mul\(\d+,\d+\)""".toRegex()

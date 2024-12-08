@@ -5,8 +5,8 @@ import kotlin.math.sign
 
 private const val MAX_SAFE_DIFFERENCE = 3
 
-class Day2 {
-    fun countSafeReports(input: String): Int {
+class Day2 : AOCDay(2) {
+    override fun puzzle1(input: String): Int {
         val reports = extractReports(input)
 
         var res = 0
@@ -19,7 +19,7 @@ class Day2 {
         return res
     }
 
-    fun countSafeReportsWithDampenerNSquaredVersion(input: String): Int {
+    override fun puzzle2(input: String): Int {
         val reports = extractReports(input)
 
         var res = 0

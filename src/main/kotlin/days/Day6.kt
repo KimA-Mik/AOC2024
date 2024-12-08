@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class Day6 {
+class Day6 : AOCDay(6) {
     private enum class Direction(val xOffset: Int, val yOffset: Int) {
         TOP(xOffset = 0, yOffset = -1),
         BOTTOM(xOffset = 0, yOffset = 1),
@@ -163,7 +163,7 @@ class Day6 {
         }
     }
 
-    fun puzzle1(input: String): Int {
+    override fun puzzle1(input: String): Int {
         val sceneState = State(input)
 
         while (sceneState.isGuardOnField()) {
@@ -172,6 +172,8 @@ class Day6 {
 
         return sceneState.visitedCellsCount()
     }
+
+    override fun puzzle2(input: String) = puzzle2BruteForce(input)
 
     fun puzzle2BruteForce(input: String): Int {
         val mutex = Mutex()

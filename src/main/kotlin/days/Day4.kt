@@ -1,7 +1,7 @@
 package com.github.kima_mik.days
 
-class Day4 {
-    fun puzzle1(input: String): Int {
+class Day4 : AOCDay(4) {
+    override fun puzzle1(input: String): Int {
         val lines = input.lines()
         var total = 0
 
@@ -57,7 +57,7 @@ class Day4 {
         return if (found) 1 else 0
     }
 
-    fun puzzle2(input: String): Int {
+    override fun puzzle2(input: String): Int {
         val lines = input.lines()
         var total = 0
 

@@ -11,13 +11,13 @@ class Day1Test {
 
     @Test
     fun totalDistanceBetweenLists() {
-        val res = day1.totalDistanceBetweenLists(input)
+        val res = day1.puzzle1(input)
         assertEquals(11, res)
     }
 
     @Test
     fun similarityScore(){
-        val res = day1.similarityScore(input)
+        val res = day1.puzzle2(input)
         assertEquals(31, res)
     }
 }

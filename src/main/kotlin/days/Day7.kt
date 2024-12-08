@@ -1,6 +1,6 @@
 package com.github.kima_mik.days
 
-class Day7 {
+class Day7 : AOCDay(7) {
     data class Input(val testValue: Long, val equation: List<Long>)
 
 
@@ -30,7 +30,7 @@ class Day7 {
         private fun isLeaf() = sum == null && multiply == null
     }
 
-    fun puzzle1(input: String): Long {
+    override fun puzzle1(input: String): Long {
         var result = 0L
 
         val rows = extractInput(input)
@@ -85,7 +85,7 @@ class Day7 {
         return root
     }
 
-    fun puzzle2(input: String): Long {
+    override fun puzzle2(input: String): Long {
         var result = 0L
 
         val rows = extractInput(input)

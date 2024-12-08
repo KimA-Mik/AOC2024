@@ -1,7 +1,7 @@
 package com.github.kima_mik.days
 
-class Day5 {
-    fun puzzle1(input: String): Int {
+class Day5 : AOCDay(5) {
+    override fun puzzle1(input: String): Int {
         var result = 0
 
         val pageOrderingRules = extractPageOrderingRules(input)
@@ -13,6 +13,8 @@ class Day5 {
 
         return result
     }
+
+    override fun puzzle2(input: String) = puzzle2_1(input)
 
     private fun extractPageOrderingRules(input: String): Map<Int, Set<Int>> {
         //10|10
@@ -53,7 +55,7 @@ class Day5 {
         return update[update.size / 2]
     }
 
-    fun puzzle2(input: String): Int {
+    fun puzzle2_1(input: String): Int {
         var result = 0
 
         val pageOrderingRules = extractPageOrderingRules(input)
