@@ -9,6 +9,10 @@ private const val EMPTY_CELL = '.'
 
 class Day8 : AOCDay(8) {
     private class Field(val map: CharArray, val width: Int, val height: Int) {
+        fun setAntinode(x: Int, y: Int) {
+            map[y * width + x] = ANTINODE_CELL
+        }
+
         override fun toString() = buildString((width + 1) * height) {
             for (y in 0 until height) {
                 for (x in 0 until width) {
@@ -30,7 +34,16 @@ class Day8 : AOCDay(8) {
         return field.map.count { it == ANTINODE_CELL }
     }
 
-    override fun puzzle2(input: String) = null
+    override fun puzzle2(input: String): Int {
+        val field = extractField(input)
+        val antennas = extractAntennas(field)
+
+        for (antenna in antennas) {
+            plotAntinodes(antenna.value, field, checkDistance = false)
+        }
+
+        return field.map.count { it == ANTINODE_CELL }
+    }
 
     private fun extractField(input: String): Field {
         val lines = input.trim().lines().map { it.trim() }
@@ -56,7 +69,7 @@ class Day8 : AOCDay(8) {
         return res
     }
 
-    private fun plotAntinodes(positions: List<Int>, field: Field) {
+    private fun plotAntinodes(positions: List<Int>, field: Field, checkDistance: Boolean = true) {
         for (i in positions.indices) {
             val x1 = positions[i] % field.width
             val y1 = positions[i] / field.width
@@ -64,27 +77,24 @@ class Day8 : AOCDay(8) {
                 val x2 = positions[j] % field.width
                 val y2 = positions[j] / field.width
 
-                plotAntinodesBetweenAntennas(x1, y1, x2, y2, field)
+                plotAntinodesBetweenAntennas(x1, y1, x2, y2, field, checkDistance)
             }
         }
     }
 
-    private fun squareDistance(x1: Int, y1: Int, x2: Int, y2: Int): Int {
+    private fun plotAntinodesBetweenAntennas(x1: Int, y1: Int, x2: Int, y2: Int, field: Field, checkDistance: Boolean) {
         val dx = x2 - x1
         val dy = y2 - y1
 
-        return dx * dx + dy * dy
-    }
-
-    private fun plotAntinodesBetweenAntennas(x1: Int, y1: Int, x2: Int, y2: Int, field: Field) {
-        val dx = x2 - x1
-        val dy = y2 - y1
-
-        var x = x1 + dx
-        var y = y1 + dy
+        var x = x1
+        var y = y1
         while (x in 0 until field.width && y in 0 until field.height) {
-            if (checkAntinode(x, y, x1, y1, x2, y2)) {
-                field.map[y * field.width + x] = ANTINODE_CELL
+            if (checkDistance) {
+                if (checkAntinodeDistance(x, y, x1, y1, x2, y2)) {
+                    field.setAntinode(x, y)
+                }
+            } else {
+                field.setAntinode(x, y)
             }
 
             x += dx
@@ -94,8 +104,12 @@ class Day8 : AOCDay(8) {
         x = x1 - dx
         y = y1 - dy
         while (x in 0 until field.width && y in 0 until field.height) {
-            if (checkAntinode(x, y, x1, y1, x2, y2)) {
-                field.map[y * field.width + x] = ANTINODE_CELL
+            if (checkDistance) {
+                if (checkAntinodeDistance(x, y, x1, y1, x2, y2)) {
+                    field.setAntinode(x, y)
+                }
+            } else {
+                field.setAntinode(x, y)
             }
 
             x -= dx
@@ -104,11 +118,18 @@ class Day8 : AOCDay(8) {
     }
 
     private val eps = 1e-3
-    private fun checkAntinode(pointX: Int, pointY: Int, x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
+    private fun checkAntinodeDistance(pointX: Int, pointY: Int, x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
         val d1 = squareDistance(pointX, pointY, x1, y1).toFloat()
         val d2 = squareDistance(pointX, pointY, x2, y2).toFloat()
 
         if (d1 == 0f || d2 == 0f) return false
         return abs(max(d1, d2) / min(d1, d2) - 4f) < eps
+    }
+
+    private fun squareDistance(x1: Int, y1: Int, x2: Int, y2: Int): Int {
+        val dx = x2 - x1
+        val dy = y2 - y1
+
+        return dx * dx + dy * dy
     }
 }

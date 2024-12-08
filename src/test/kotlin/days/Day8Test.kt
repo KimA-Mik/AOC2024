@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 
 class Day8Test {
     private val input = getTestInput(8)
+    private val input2 = getTestInput(8, 2)
     private val day8 = Day8()
 
     @Test
@@ -16,6 +17,7 @@ class Day8Test {
 
     @Test
     fun puzzle2() {
-
+        assertEquals(34, day8.puzzle2(input))
+        assertEquals(9, day8.puzzle2(input2))
     }
 }
