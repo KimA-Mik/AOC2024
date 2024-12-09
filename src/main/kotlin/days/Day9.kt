@@ -16,7 +16,7 @@ class Day9 : AOCDay(9) {
         val compressedMap = input.trim().map { it.digitToInt() }
         val fsSize = compressedMap.sum()
 
-        val fs = IntArray(fsSize) { 0 }
+        val fs = IntArray(fsSize)
         val emptySpaceIndex = sortedMapOf<Int, Int>()
 
         var fsOffset = 0
