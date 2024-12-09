@@ -3,6 +3,7 @@ package com.github.kima_mik
 import com.github.kima_mik.days.*
 import java.io.File
 import kotlin.system.exitProcess
+import kotlin.time.measureTime
 
 fun main(args: Array<String>) {
     if (args.size != 1) {
@@ -33,8 +34,12 @@ fun runDay(day: AOCDay) {
     val input = getInput(num)
         ?: exitProcess(1)
 
-    println("Day ${num}_1: ${day.puzzle1(input)}")
-    println("Day ${num}_2: ${day.puzzle2(input)}")
+    var res: Any?
+    var time = measureTime { res = day.puzzle1(input) }
+    println("Day ${num}_1 ($time):\n$res\n")
+
+    time = measureTime { res = day.puzzle2(input) }
+    println("Day ${num}_2 ($time):\n$res\n")
 }
 
 fun getInput(day: Int, puzzleInput: Int? = null): String? {
