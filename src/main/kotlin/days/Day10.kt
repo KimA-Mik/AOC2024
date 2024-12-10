@@ -44,17 +44,18 @@ class Day10 : AOCDay(10) {
 
     private fun countTrails(field: Field): Int {
         var result = 0
-
+        val headIndices = mutableSetOf<Int>()
         for (i in field.cells.indices) {
-            result += traceTrail(i, field)
+            traceTrail(i, field) { headIndices.add(it) }
+            result += headIndices.size
+            headIndices.clear()
         }
 
         return result
     }
 
-    private fun traceTrail(startIndex: Int, field: Field): Int {
-        if (field[startIndex] != 0) return 0
-        val resultSet = mutableSetOf<Int>()
+    private fun traceTrail(startIndex: Int, field: Field, recordHeadIndex: (headIndex: Int) -> Unit) {
+        if (field[startIndex] != 0) return
         val queue = ArrayDeque<Int>()
         queue.addLast(startIndex)
 
@@ -62,7 +63,7 @@ class Day10 : AOCDay(10) {
             val curIndex = queue.removeFirst()
             val cur = field[curIndex]
             if (cur == 9) {
-                resultSet.add(curIndex)
+                recordHeadIndex(curIndex)
                 continue
             }
 
@@ -88,9 +89,20 @@ class Day10 : AOCDay(10) {
                 queue.addLast(field.getIndex(x, bottomY))
             }
         }
-
-        return resultSet.size
     }
 
-    override fun puzzle2(input: String) = null
+    override fun puzzle2(input: String): Int {
+        val field = extractField(input)
+
+        return rateTrails(field)
+    }
+
+    private fun rateTrails(field: Field): Int {
+        var result = 0
+        for (i in field.cells.indices) {
+            traceTrail(i, field) { result += 1 }
+        }
+
+        return result
+    }
 }
