@@ -83,5 +83,47 @@ class Day11 : AOCDay(11) {
         return left to right
     }
 
-    override fun puzzle2(input: String) = null
+    override fun puzzle2(input: String): Long {
+        var line = extractInput(input)
+            .groupBy { it }
+            .mapValues { it.value.size.toLong() }
+            .toMutableMap()
+
+        repeat(75) {
+            line = simulateBlink(line)
+        }
+
+        return line.values.sum()
+    }
+
+    private fun simulateBlink(line: MutableMap<Long, Long>): MutableMap<Long, Long> {
+        val result = mutableMapOf<Long, Long>()
+        for (group in line) {
+            when {
+                group.key == 0L -> {
+                    result.increaseKey(1, group.value)
+                }
+
+                numberLength(group.key) % 2 == 0 -> {
+                    val (left, right) = group.key.splitInHalf()
+                    result.increaseKey(left, group.value)
+                    result.increaseKey(right, group.value)
+                }
+
+                else -> {
+                    result.increaseKey(group.key * 2024L, group.value)
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun MutableMap<Long, Long>.increaseKey(key: Long, times: Long) {
+        if (containsKey(key)) {
+            this[key] = this[key]!! + times
+        } else {
+            this[key] = times
+        }
+    }
 }
