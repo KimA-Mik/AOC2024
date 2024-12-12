@@ -26,4 +26,12 @@ class CharField(val cells: CharArray, val width: Int, val height: Int) {
 
         return Pair(x, y)
     }
+
+    companion object {
+        fun extract(input: String): CharField {
+            val lines = input.trim().lines().map { it.trim() }
+
+            return CharField(lines.joinToString("").toCharArray(), lines[0].length, lines.size)
+        }
+    }
 }

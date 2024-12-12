@@ -10,7 +10,7 @@ private const val EMPTY_CELL = '.'
 
 class Day8 : AOCDay(8) {
     override fun puzzle1(input: String): Int {
-        val field = extractField(input)
+        val field = CharField.extract(input)
         val antennas = extractAntennas(field)
 
         for (antenna in antennas) {
@@ -21,7 +21,7 @@ class Day8 : AOCDay(8) {
     }
 
     override fun puzzle2(input: String): Int {
-        val field = extractField(input)
+        val field = CharField.extract(input)
         val antennas = extractAntennas(field)
 
         for (antenna in antennas) {
@@ -31,11 +31,6 @@ class Day8 : AOCDay(8) {
         return field.cells.count { it == ANTINODE_CELL }
     }
 
-    private fun extractField(input: String): CharField {
-        val lines = input.trim().lines().map { it.trim() }
-
-        return CharField(lines.joinToString("").toCharArray(), lines[0].length, lines.size)
-    }
 
     private fun extractAntennas(field: CharField): Map<Char, List<Int>> {
         val res = mutableMapOf<Char, MutableList<Int>>()
