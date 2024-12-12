@@ -16,6 +16,6 @@ class Day11Test {
 
     @Test
     fun puzzle2() {
-        assertEquals(55312L, day11.puzzle2(input))
+        assertEquals(65601038650482L, day11.puzzle2(input))
     }
 }

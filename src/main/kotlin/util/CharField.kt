@@ -12,6 +12,13 @@ class CharField(val cells: CharArray, val width: Int, val height: Int) {
 
     operator fun get(x: Int, y: Int) = cells[y * width + x]
     operator fun get(i: Int) = cells[i]
+    operator fun set(i: Int, value: Char) {
+        cells[i] = value
+    }
+
+    operator fun set(x: Int, y: Int, value: Char) = set(y * width + x, value)
+
+
     fun getIndex(x: Int, y: Int) = y * width + x
     fun indexToCoordinates(index: Int): Pair<Int, Int> {
         val x = index % width
