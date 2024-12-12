@@ -1,34 +1,15 @@
 package com.github.kima_mik.days
 
+import com.github.kima_mik.util.IntField
+
 class Day10 : AOCDay(10) {
-    class Field(val cells: IntArray, val width: Int, val height: Int) {
-        override fun toString() = buildString {
-            for (y in 0 until height) {
-                for (x in 0 until width) {
-                    append(cells[y * width + x])
-                }
-                append('\n')
-            }
-        }
-
-        operator fun get(x: Int, y: Int) = cells[y * width + x]
-        operator fun get(i: Int) = cells[i]
-        fun getIndex(x: Int, y: Int) = y * width + x
-        fun indexToCoordinates(index: Int): Pair<Int, Int> {
-            val x = index % width
-            val y = index / width
-
-            return Pair(x, y)
-        }
-    }
-
     override fun puzzle1(input: String): Int {
         val field = extractField(input)
 
         return countTrails(field)
     }
 
-    private fun extractField(input: String): Field {
+    private fun extractField(input: String): IntField {
         val lines = input.trim().lines()
         val w = lines[0].length
         val h = lines.size
@@ -39,10 +20,10 @@ class Day10 : AOCDay(10) {
             }
         }
 
-        return Field(intArray, w, h)
+        return IntField(intArray, w, h)
     }
 
-    private fun countTrails(field: Field): Int {
+    private fun countTrails(field: IntField): Int {
         var result = 0
         val headIndices = mutableSetOf<Int>()
         for (i in field.cells.indices) {
@@ -54,7 +35,7 @@ class Day10 : AOCDay(10) {
         return result
     }
 
-    private fun traceTrail(startIndex: Int, field: Field, recordHeadIndex: (headIndex: Int) -> Unit) {
+    private fun traceTrail(startIndex: Int, field: IntField, recordHeadIndex: (headIndex: Int) -> Unit) {
         if (field[startIndex] != 0) return
         val queue = ArrayDeque<Int>()
         queue.addLast(startIndex)
@@ -97,7 +78,7 @@ class Day10 : AOCDay(10) {
         return rateTrails(field)
     }
 
-    private fun rateTrails(field: Field): Int {
+    private fun rateTrails(field: IntField): Int {
         var result = 0
         for (i in field.cells.indices) {
             traceTrail(i, field) { result += 1 }
