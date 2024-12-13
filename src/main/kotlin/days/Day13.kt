@@ -1,5 +1,7 @@
 package com.github.kima_mik.days
 
+import kotlin.math.min
+
 private const val PREFIX_A = "Button A: "
 private const val PREFIX_B = "Button B: "
 private const val PREFIX_PRIZE = "Prize: "
@@ -8,6 +10,8 @@ private const val X_PLUS = "X+"
 private const val Y_PLUS = "Y+"
 private const val X_EQUALS = "X="
 private const val Y_EQUALS = "Y="
+
+private const val TARGET_OFFSET = 10000000000000
 
 class Day13 : AOCDay(13) {
     data class Point(val x: Long, val y: Long)
@@ -69,22 +73,62 @@ class Day13 : AOCDay(13) {
         return result
     }
 
-    private fun countTokens(machines: Machine): Int {
+    private fun countTokens(machine: Machine): Int {
         var smallestCount = Int.MAX_VALUE
         for (a in 0 until 100) {
             for (b in 0 until 100) {
-                val x = machines.buttonA.x * a + machines.buttonB.x * b
-                val y = machines.buttonA.y * a + machines.buttonB.y * b
-                if (x != machines.target.x || y != machines.target.y) {
+                val x = machine.buttonA.x * a + machine.buttonB.x * b
+                val y = machine.buttonA.y * a + machine.buttonB.y * b
+                if (x != machine.target.x || y != machine.target.y) {
                     continue
                 }
 
-                smallestCount = minOf(smallestCount, 3 * a + b)
+                smallestCount = min(smallestCount, 3 * a + b)
             }
         }
 
         return if (smallestCount < Int.MAX_VALUE) smallestCount else 0
     }
 
-    override fun puzzle2(input: String) = null
+    private fun countTokens2(machine: Machine, offset: Long = TARGET_OFFSET): Long {
+        val targetX = machine.target.x + offset
+        val targetY = machine.target.y + offset
+
+        //Hardcoded Cramer's rule for 2x2 matrix
+        val detCom = machine.buttonA.x * machine.buttonB.y - machine.buttonA.y * machine.buttonB.x
+        if (detCom == 0L) {
+            return 0L
+        }
+
+        val detA = targetX * machine.buttonB.y - targetY * machine.buttonB.x
+        val detB = machine.buttonA.x * targetY - machine.buttonA.y * targetX
+
+        if (detA % detCom != 0L) return 0
+        if (detB % detCom != 0L) return 0
+
+        val a = detA / detCom
+        val b = detB / detCom
+
+        return 3 * a + b
+    }
+
+    override fun puzzle2(input: String): Long {
+        var result = 0L
+        val machines = extractInput(input)
+        for (machine in machines) {
+            result += countTokens2(machine)
+        }
+
+        return result
+    }
+
+    fun puzzle2Test(input: String): Long {
+        var result = 0L
+        val machines = extractInput(input)
+        for (machine in machines) {
+            result += countTokens2(machine, offset = 0L)
+        }
+
+        return result
+    }
 }
