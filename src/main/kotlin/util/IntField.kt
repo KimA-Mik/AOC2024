@@ -1,6 +1,8 @@
 package com.github.kima_mik.util
 
 class IntField(val cells: IntArray, val width: Int, val height: Int) {
+    constructor(width: Int, height: Int) : this(IntArray(width * height), width, height)
+
     override fun toString() = buildString {
         for (y in 0 until height) {
             for (x in 0 until width) {

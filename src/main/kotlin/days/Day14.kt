@@ -1,5 +1,8 @@
 package com.github.kima_mik.days
 
+import com.github.kima_mik.util.IntField
+import kotlin.math.max
+
 private const val WIDTH = 101
 private const val HEIGHT = 103
 private const val DURATION = 100
@@ -80,5 +83,71 @@ class Day14 : AOCDay(14) {
         return (this % other + other) % other
     }
 
-    override fun puzzle2(input: String) = null
+    override fun puzzle2(input: String): Int {
+        val robots = extractInput(input)
+        return simulateUntilTree(
+            robots = robots,
+            duration = 1000000,
+            fieldWidth = WIDTH,
+            fieldHeight = HEIGHT
+        )
+    }
+
+    private fun simulateUntilTree(
+        robots: List<Robot>,
+        duration: Int,
+        fieldWidth: Int,
+        fieldHeight: Int
+    ): Int {
+        var intermediateRobots = robots
+        repeat(duration) {
+            val field = IntField(fieldWidth, fieldHeight)
+            intermediateRobots = intermediateRobots.map { robot ->
+                val x = (robot.start.x + robot.velocity.x).fmod(fieldWidth)
+                val y = (robot.start.y + robot.velocity.y).fmod(fieldHeight)
+                field[x, y] = 1
+                Robot(Point(x, y), robot.velocity)
+            }
+
+            if (tryFindTree(field)) {
+                println("${it + 1} seconds passed")
+                println(field)
+                return it + 1
+            }
+        }
+        return -1
+    }
+
+    private fun tryFindTree(field: IntField): Boolean {
+        var maxSize = Int.MIN_VALUE
+        var continuation = 0
+
+        for (y in 0 until field.height) {
+            val longestLine = field.getLongestLine(y)
+            if (longestLine > 5) {
+                continuation++
+            } else {
+                maxSize = max(maxSize, continuation)
+                continuation = 0
+            }
+        }
+
+        return max(maxSize, continuation) > 5
+    }
+
+    private fun IntField.getLongestLine(y: Int): Int {
+        var longest = Int.MIN_VALUE
+        var continuation = 0
+
+        for (x in 0 until width) {
+            if (get(x, y) != 0) {
+                continuation += 1
+            } else {
+                longest = max(longest, continuation)
+                continuation = 0
+            }
+        }
+
+        return max(longest, continuation)
+    }
 }
