@@ -1,6 +1,8 @@
 package com.github.kima_mik.util
 
 class CharField(val cells: CharArray, val width: Int, val height: Int) {
+    constructor(width: Int, height: Int) : this(CharArray(width * height), width, height)
+
     override fun toString() = buildString {
         for (y in 0 until height) {
             for (x in 0 until width) {
