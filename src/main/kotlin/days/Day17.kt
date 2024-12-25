@@ -26,6 +26,7 @@ class Day17 : AOCDay(17) {
         }
 
         fun executeCommand() {
+//            println("regA = $regA, regB = $regB, regC = $regC, instructionPointer = $instructionPointer")
             if (instructionPointer !in program.indices) {
                 halted = true
                 return
@@ -54,9 +55,7 @@ class Day17 : AOCDay(17) {
 
         private inner class Adv : Instruction {
             override fun execute(operand: Int) {
-                val numerator = regA
-                val denominator = 1 shl unwrapComboOperand(operand)
-                regA = numerator / denominator
+                regA = regA shr unwrapComboOperand(operand)
                 instructionPointer += 2
             }
         }
@@ -102,20 +101,14 @@ class Day17 : AOCDay(17) {
 
         inner class Bdv : Instruction {
             override fun execute(operand: Int) {
-                val numerator = regA
-                val denominator = 1 shl unwrapComboOperand(operand)
-
-                regB = numerator / denominator
+                regB = regA shr unwrapComboOperand(operand)
                 instructionPointer += 2
             }
         }
 
         inner class Cdv : Instruction {
             override fun execute(operand: Int) {
-                val numerator = regA
-                val denominator = 1 shl unwrapComboOperand(operand)
-
-                regC = numerator / denominator
+                regC = regA shr unwrapComboOperand(operand)
                 instructionPointer += 2
             }
         }
@@ -155,5 +148,11 @@ class Day17 : AOCDay(17) {
     }
 
 
-    override fun puzzle2(input: String) = null
+    override fun puzzle2(input: String): Int {
+        val cocutor = extractInput(input)
+        cocutor.run()
+        println(cocutor.stdOut)
+
+        return 0
+    }
 }

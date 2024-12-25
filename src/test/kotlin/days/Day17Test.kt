@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 class Day17Test {
     private val day17 = Day17()
     private val input = getTestInput(17)
+    private val input2 = getTestInput(17, 2)
 
     @Test
     fun cocutorBstTest() {
@@ -53,5 +54,17 @@ class Day17Test {
     @Test
     fun puzzle1() {
         assertEquals("4,6,3,5,6,3,5,2,1,0", day17.puzzle1(input))
+    }
+
+    @Test
+    fun `test possibility of p2`() {
+        val cocutor = Day17.Cocutor(regA = 117440, program = listOf(0, 3, 5, 4, 3, 0))
+        cocutor.run()
+        assertEquals("0,3,5,4,3,0", cocutor.stdOut)
+    }
+
+    @Test
+    fun puzzle2() {
+        assertEquals(117440, day17.puzzle2(input2))
     }
 }
